@@ -11,13 +11,7 @@
 // When you press the enter/return key when typing in the input field, then the content of the input field should immediately be blank.
 // Sample Person Element & Children
 
-function createCard(person){
-    let personHeader = document.createElement("header");
-    let personSection = document.createElement("section");
-    let personFooter = document.createElement("footer");
-    let headerText = `${person.name} - ${person.title}`
-    console.log(headerText);
-}
+let userTextInput = document.getElementById("userTextInput");
 
 let famousPeople = [
     {
@@ -29,7 +23,7 @@ let famousPeople = [
         birth: 1747,
         death: 1797
       }
-    }
+    },
 
     {
       title: "U.S. President",
@@ -40,7 +34,7 @@ let famousPeople = [
         birth: 1858,
         death: 1919
       }
-    }
+    },
 
     {
       title: "General of the Army",
@@ -53,4 +47,81 @@ let famousPeople = [
       }
     }
 ];
+function createCard(person){
+    let card = document.createElement("person");
+    let personHeader = document.createElement("header");
+    let personSection = document.createElement("section");
+    personSection.classList = "bio";
+    let personFooter = document.createElement("footer");
+    let personImage = document.createElement("img");
+    let headerText = document.createTextNode(`${person.name} - ${person.title}`);
+    let sectionText = document.createTextNode(`${person.bio}`);
+    let footerText = document.createTextNode(`${person.lifespan.birth} - ${person.lifespan.death}`);
 
+    personHeader.appendChild(headerText);
+    personSection.appendChild(sectionText);
+    personFooter.appendChild(footerText);
+    // personImage.setAttribute("src", person.image);
+    personImage.setAttribute("alt", person.name);
+
+    card.appendChild(personHeader);
+    card.appendChild(personImage);
+    card.appendChild(personSection);
+
+    card.appendChild(personFooter);
+    card.className = "card";
+
+    return card
+}
+
+(function populateDOM(){
+    let outputLocation = document.getElementById("cardContainer");
+
+    for (var i = 0; i < famousPeople.length; i++) {
+        let currentCard = createCard(famousPeople[i]);
+
+        if (i%2 === 0) {
+            currentCard.classList.toggle("even");
+        }
+
+        if (i%2 === 1) {
+            currentCard.classList.toggle("odd");
+        }
+
+        outputLocation.appendChild(currentCard);
+    }
+}())
+
+let cards = document.getElementsByClassName("card");
+
+for (var i = 0; i < cards.length; i++) {
+    cards[i].addEventListener("click", function(){
+        for (var i = 0; i < cards.length; i++) {
+            cards[i].classList.remove("bordered");
+        }
+        event.currentTarget.classList.toggle("bordered");
+        userTextInput.focus();
+    })
+}
+
+document.getElementById("userTextInput").addEventListener("keyup", function(){
+    let messageText = document.getElementById("userTextInput").value;
+
+    for (var i = 0; i < cards.length; i++) {
+        let keyResult = event.which;
+        if (keyResult === 13) {
+            break;
+        }
+        if (cards[i].classList.contains("bordered")) {
+            let bioToChange =cards[i].getElementsByClassName("bio")
+            bioToChange[0].innerText = messageText;
+         }
+    }
+})
+
+document.getElementById("userTextInput").addEventListener("keydown", function(){
+    let keyResult = event.which;
+    if (keyResult === 13) {
+        document.getElementById("userTextInput").value = "";
+    }
+});

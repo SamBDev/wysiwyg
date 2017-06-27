@@ -1,0 +1,17 @@
+
+person {
+    overflow: auto;
+    display: block;
+}
+
+person.even {
+    background-color: palegoldenrod;
+}
+
+person.odd {
+    background-color: aqua;
+}
+
+.bordered {
+    border: 1px dotted black;
+}
